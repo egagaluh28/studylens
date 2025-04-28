@@ -1,0 +1,2 @@
+training_model/headpose_cnn.weights.h5 filter=lfs diff=lfs merge=lfs -text
+training_model/focus_lstm.weights.h5 filter=lfs diff=lfs merge=lfs -text

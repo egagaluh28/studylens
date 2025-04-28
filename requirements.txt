@@ -1,0 +1,7 @@
+Flask
+opencv-python
+numpy
+tensorflow
+matplotlib
+scikit-learn
+ultralytics
