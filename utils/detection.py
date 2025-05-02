@@ -1,0 +1,63 @@
+import cv2
+import numpy as np
+from ultralytics import YOLO
+from tensorflow.keras.models import load_model
+
+# Load YOLOv8 model
+yolo_model = YOLO("models/yolov8n-face.pt")  # Pre-trained YOLOv8 model for face detection
+
+# Load CNN model for head position classification
+cnn_model = load_model("models/head_position_cnn.h5")
+
+frame_counter = 0  # Tambahkan penghitung frame
+
+def detect_head_position(frame):
+    global frame_counter
+    frame_counter += 1
+
+    # Proses hanya setiap 3 frame untuk efisiensi
+    if frame_counter % 3 != 0:
+        return "not_detected"
+
+    # Deteksi wajah menggunakan YOLOv8
+    results = yolo_model(frame)
+    detections = results[0].boxes.data  # Bounding boxes with confidence scores
+
+    if len(detections) == 0:
+        return "not_detected"
+
+    # Filter berdasarkan confidence threshold
+    confidence_threshold = 0.5
+    filtered_detections = [box for box in detections if box[4] > confidence_threshold]
+
+    if len(filtered_detections) == 0:
+        return "not_detected"
+
+    for box in filtered_detections:
+        x1, y1, x2, y2 = map(int, box[:4])
+        face = frame[y1:y2, x1:x2]
+
+        # Preprocess wajah untuk CNN
+        try:
+            face_resized = cv2.resize(face, (224, 224))
+            face_normalized = face_resized / 255.0
+            face_input = np.expand_dims(face_normalized, axis=0)
+
+            # Prediksi posisi kepala menggunakan CNN
+            predictions = cnn_model.predict(face_input, verbose=0)
+            head_position = np.argmax(predictions)
+
+            # Interpretasi hasil prediksi
+            if head_position == 0:
+                return "focus"
+            elif head_position == 1:
+                return "distracted"
+            elif head_position == 2:
+                return "sleepy"
+            else:
+                return "not_detected"
+        except Exception as e:
+            print(f"Error processing face: {e}")
+            return "not_detected"
+
+    return "not_detected"
