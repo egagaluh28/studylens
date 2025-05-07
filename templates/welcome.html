@@ -940,9 +940,24 @@
                 .then((data) => {
                     displaySummary(data);
                     document.getElementById("session-summary").classList.remove("hidden");
+
+                    // Reset session data after displaying the summary
+                    resetSessionData();
                 })
                 .catch((error) => {
                     console.error("Error fetching summary:", error);
+                });
+        }
+
+        // Reset session data on the server
+        function resetSessionData() {
+            fetch("/reset_session", { method: "POST" })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data.message);
+                })
+                .catch((error) => {
+                    console.error("Error resetting session data:", error);
                 });
         }
 
@@ -1144,7 +1159,7 @@
           <i class="bx bx-timer text-gray-400 mr-2"></i>
           <div>
             <p class="text-xs text-gray-500 dark:text-gray-400">Duration</p>
-            <p class="font-medium text-gray-800 dark:text-white">${data.duration_minutes} minutes</p>
+            <p class="font-medium text-gray-800 dark:text-white">${data.duration}</p>
           </div>
         </div>
         <div class="flex items-center">
