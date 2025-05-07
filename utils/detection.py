@@ -27,7 +27,7 @@ def detect_head_position(frame):
         return "not_detected"
 
     # Filter berdasarkan confidence threshold
-    confidence_threshold = 0.5
+    confidence_threshold = 0.4
     filtered_detections = [box for box in detections if box[4] > confidence_threshold]
 
     if len(filtered_detections) == 0:
