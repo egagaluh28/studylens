@@ -2,560 +2,567 @@
 <html lang="en" class="light">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StudyLens| Ai For Study</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50: "#eef2ff",
-              100: "#e0e7ff",
-              200: "#c7d2fe",
-              300: "#a5b4fc",
-              400: "#818cf8",
-              500: "#6366f1",
-              600: "#4f46e5",
-              700: "#4338ca",
-              800: "#3730a3",
-              900: "#312e81",
-              950: "#1e1b4b",
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StudyLens| Ai For Study</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: "#eef2ff",
+                            100: "#e0e7ff",
+                            200: "#c7d2fe",
+                            300: "#a5b4fc",
+                            400: "#818cf8",
+                            500: "#6366f1",
+                            600: "#4f46e5",
+                            700: "#4338ca",
+                            800: "#3730a3",
+                            900: "#312e81",
+                            950: "#1e1b4b",
+                        },
+                    },
+                    backdropBlur: {
+                        xs: "2px",
+                    },
+                },
             },
-          },
-          backdropBlur: {
-            xs: "2px",
-          },
-        },
-      },
-    };
-  </script>
-  <style>
-    /* Custom styles */
-    .sidebar {
-      width: 250px;
-      transition: all 0.3s ease;
-    }
+        };
+    </script>
+    <style>
+        /* Custom styles */
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s ease;
+        }
 
-    .sidebar.collapsed {
-      width: 70px;
-    }
+        .sidebar.collapsed {
+            width: 70px;
+        }
 
-    .sidebar.collapsed .nav-text {
-      display: none;
-    }
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
 
-    .main-content {
-      transition: all 0.3s ease;
-      margin-left: 250px;
-    }
+        .main-content {
+            transition: all 0.3s ease;
+            margin-left: 250px;
+        }
 
-    .main-content.expanded {
-      margin-left: 70px;
-    }
+        .main-content.expanded {
+            margin-left: 70px;
+        }
 
-    @media (max-width: 768px) {
-      .sidebar {
-        width: 70px;
-      }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
 
-      .sidebar .nav-text {
-        display: none;
-      }
+            .sidebar .nav-text {
+                display: none;
+            }
 
-      .sidebar.expanded {
-        width: 250px;
-      }
+            .sidebar.expanded {
+                width: 250px;
+            }
 
-      .sidebar.expanded .nav-text {
-        display: inline;
-      }
+            .sidebar.expanded .nav-text {
+                display: inline;
+            }
 
-      .main-content {
-        margin-left: 70px;
-      }
-    }
+            .main-content {
+                margin-left: 70px;
+            }
+        }
 
-    .page {
-      display: none;
-    }
+        .page {
+            display: none;
+        }
 
-    .page.active {
-      display: block;
-    }
+        .page.active {
+            display: block;
+        }
 
-    /* Glassmorphism */
-    .glass {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-    }
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
 
-    .dark .glass {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
+        .dark .glass {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
 
-    ::-webkit-scrollbar-thumb {
-      background: rgba(156, 163, 175, 0.5);
-      border-radius: 3px;
-    }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 3px;
+        }
 
-    .dark ::-webkit-scrollbar-thumb {
-      background: rgba(75, 85, 99, 0.5);
-    }
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.5);
+        }
 
-    /* Interactive gradient background */
-    .interactive-gradient {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(-45deg, #6366f1, #8b5cf6, #3b82f6, #0ea5e9);
-      background-size: 400% 400%;
-      animation: gradient 15s ease infinite;
-      --x: 50%;
-      --y: 50%;
-    }
+        /* Interactive gradient background */
+        .interactive-gradient {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(-45deg, #6366f1, #8b5cf6, #3b82f6, #0ea5e9);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            --x: 50%;
+            --y: 50%;
+        }
 
-    .interactive-gradient::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle 800px at var(--x) var(--y),
-          rgba(255, 255, 255, 0.25),
-          transparent 40%);
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
+        .interactive-gradient::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle 800px at var(--x) var(--y),
+                    rgba(255, 255, 255, 0.25),
+                    transparent 40%);
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
 
-    .dark .interactive-gradient::before {
-      background: radial-gradient(circle 800px at var(--x) var(--y),
-          rgba(255, 255, 255, 0.15),
-          transparent 40%);
-    }
+        .dark .interactive-gradient::before {
+            background: radial-gradient(circle 800px at var(--x) var(--y),
+                    rgba(255, 255, 255, 0.15),
+                    transparent 40%);
+        }
 
-    .interactive-card {
-      position: relative;
-      overflow: hidden;
-      --x: 50%;
-      --y: 50%;
-    }
+        .interactive-card {
+            position: relative;
+            overflow: hidden;
+            --x: 50%;
+            --y: 50%;
+        }
 
-    .interactive-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle 200px at var(--x) var(--y),
-          rgba(99, 102, 241, 0.15),
-          transparent 40%);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
+        .interactive-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle 200px at var(--x) var(--y),
+                    rgba(99, 102, 241, 0.15),
+                    transparent 40%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
 
-    .interactive-card:hover::before {
-      opacity: 1;
-    }
+        .interactive-card:hover::before {
+            opacity: 1;
+        }
 
-    .dark .interactive-card::before {
-      background: radial-gradient(circle 200px at var(--x) var(--y),
-          rgba(99, 102, 241, 0.2),
-          transparent 40%);
-    }
+        .dark .interactive-card::before {
+            background: radial-gradient(circle 200px at var(--x) var(--y),
+                    rgba(99, 102, 241, 0.2),
+                    transparent 40%);
+        }
 
-    @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
 
-      50% {
-        background-position: 100% 50%;
-      }
+            50% {
+                background-position: 100% 50%;
+            }
 
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
 
-    /* Pulse animation for camera button */
-    .pulse {
-      animation: pulse 2s infinite;
-    }
+        /* Pulse animation for camera button */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
 
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
-      }
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
 
-      70% {
-        box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
-      }
+            70% {
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
 
-      100% {
-        box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
-      }
-    }
+            100% {
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+            }
+        }
 
-    /* Glow effect */
-    .glow {
-      position: relative;
-    }
+        /* Glow effect */
+        .glow {
+            position: relative;
+        }
 
-    .glow::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: radial-gradient(circle at var(--x) var(--y),
-          rgba(99, 102, 241, 0.4) 0%,
-          transparent 50%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
+        .glow::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at var(--x) var(--y),
+                    rgba(99, 102, 241, 0.4) 0%,
+                    transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    .glow:hover::after {
-      opacity: 1;
-    }
-  </style>
+        .glow:hover::after {
+            opacity: 1;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
-  <!-- Background pattern -->
-  <div class="fixed inset-0 z-0 opacity-5 dark:opacity-10">
-    <div class="absolute inset-0 bg-grid-primary-700/[0.2] [mask-image:linear-gradient(to_bottom,white,transparent)]">
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar fixed h-full glass z-20 shadow-lg">
-    <div class="p-4 border-b border-gray-200/30 dark:border-gray-700/30 flex items-center">
-      <div class="w-8 h-8 rounded-full interactive-gradient flex items-center justify-center mr-3">
-        <i class="bx bx-brain text-white"></i>
-      </div>
-      <h1 id="study-name" class="text-xl font-bold text-primary-600 dark:text-primary-400">
-        StudyLens
-      </h1>
+    <!-- Background pattern -->
+    <div class="fixed inset-0 z-0 opacity-5 dark:opacity-10">
+        <div
+            class="absolute inset-0 bg-grid-primary-700/[0.2] [mask-image:linear-gradient(to_bottom,white,transparent)]">
+        </div>
     </div>
 
-    <nav class="mt-6">
-      <ul>
-        <li class="mb-2 px-3">
-          <a href="#welcome"
-            class="nav-item interactive-card flex items-center p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 active">
-            <i class="bx bx-book text-xl mr-3"></i>
-            <span class="nav-text">Welcome</span>
-          </a>
-        </li>
-        <li class="mb-2 px-3">
-          <a href="#camera"
-            class="nav-item interactive-card flex items-center p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200">
-            <i class="bx bx-camera text-xl mr-3"></i>
-            <span class="nav-text">AiLens</span>
-          </a>
-        </li>
-        <!-- <li class="mb-2 px-3">
+    <!-- Sidebar -->
+    <div class="sidebar fixed h-full glass z-20 shadow-lg">
+        <div class="p-4 border-b border-gray-200/30 dark:border-gray-700/30 flex items-center">
+            <div class="w-8 h-8 rounded-full interactive-gradient flex items-center justify-center mr-3">
+                <i class="bx bx-brain text-white"></i>
+            </div>
+            <h1 id="study-name" class="text-xl font-bold text-primary-600 dark:text-primary-400">
+                StudyLens
+            </h1>
+        </div>
+
+        <nav class="mt-6">
+            <ul>
+                <li class="mb-2 px-3">
+                    <a href="#welcome"
+                        class="nav-item interactive-card flex items-center p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200 active">
+                        <i class="bx bx-book text-xl mr-3"></i>
+                        <span class="nav-text">Welcome</span>
+                    </a>
+                </li>
+                <li class="mb-2 px-3">
+                    <a href="#camera"
+                        class="nav-item interactive-card flex items-center p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200">
+                        <i class="bx bx-camera text-xl mr-3"></i>
+                        <span class="nav-text">AiLens</span>
+                    </a>
+                </li>
+                <!-- <li class="mb-2 px-3">
           <a href="#gallery"
             class="nav-item interactive-card flex items-center p-3 rounded-xl hover:bg-white/20 dark:hover:bg-gray-800/40 text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 transition-all duration-200">
             <i class="bx bx-grid-alt text-xl mr-3"></i>
             <span class="nav-text">Summary</span>
           </a>
         </li> -->
-      </ul>
-    </nav>
-  </div>
+            </ul>
+        </nav>
+    </div>
 
-  <!-- Main Content -->
-  <div class="main-content min-h-screen">
-    <!-- Header -->
-    <header class="glass sticky top-0 z-10 h-16 flex items-center px-4 shadow-sm">
-      <button id="sidebar-toggle"
-        class="mr-4 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
-        <i class="bx bx-menu text-2xl"></i>
-      </button>
-      <h2 id="page-title" class="text-xl font-semibold text-gray-800 dark:text-white">
-        Welcome to StudyLens
-      </h2>
-      <div class="ml-auto flex items-center space-x-4">
-        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-          <i class="bx bx-sun text-xl text-gray-600 dark:text-gray-300 dark:hidden"></i>
-          <i class="bx bx-moon text-xl text-gray-600 dark:text-gray-300 hidden dark:block"></i>
-        </button>
-      </div>
-    </header>
-
-    <!-- Page Content -->
-    <main class="p-6">
-      <!-- Welcome Page -->
-      <div id="welcome" class="page active">
-        <div class="max-w-6xl mx-auto">
-          <div class="glass rounded-2xl shadow-lg overflow-hidden">
-            <div class="interactive-gradient p-8 text-white">
-              <h1 class="text-4xl font-bold mb-4">Welcome to StudyLens</h1>
-              <p class="text-xl opacity-90">
-                Computer Vision for Enhanced Learning Focus
-              </p>
-            </div>
-
-            <div class="p-8 dark:text-white">
-              <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
-                StudyLens is an innovative Computer Vision program designed to
-                detect and analyze student focus levels during online learning
-                sessions. Using advanced AI algorithms, StudyLens helps
-                students improve their study habits and maximize learning
-                efficiency.
-              </p>
-
-              <div class="grid md:grid-cols-3 gap-6 mb-8">
-                <div
-                  class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
-                  <div
-                    class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                    <i class="bx bx-brain text-primary-600 dark:text-primary-400 text-xl"></i>
-                  </div>
-                  <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
-                    Focus Detection
-                  </h3>
-                  <p class="text-gray-600 dark:text-gray-300">
-                    Real-time analysis of your attention levels during study
-                    sessions
-                  </p>
-                </div>
-
-                <div
-                  class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
-                  <div
-                    class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                    <i class="bx bx-target-lock text-primary-600 dark:text-primary-400 text-xl"></i>
-                  </div>
-                  <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
-                    Distraction Alerts
-                  </h3>
-                  <p class="text-gray-600 dark:text-gray-300">
-                    Gentle notifications when your focus drifts to help you
-                    stay on track
-                  </p>
-                </div>
-
-                <div
-                  class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
-                  <div
-                    class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-                    <i class="bx bx-line-chart text-primary-600 dark:text-primary-400 text-xl"></i>
-                  </div>
-                  <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
-                    Progress Tracking
-                  </h3>
-                  <p class="text-gray-600 dark:text-gray-300">
-                    Detailed analytics to help you understand and improve your
-                    study patterns
-                  </p>
-                </div>
-              </div>
-
-              <div
-                class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
-                <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">
-                  How It Works
-                </h3>
-                <ol class="list-decimal pl-5 space-y-2 text-gray-700 dark:text-gray-300">
-                  <li>Open the camera in the "AiLens" section</li>
-                  <li>Set your study duration using the Pomodoro timer</li>
-                  <li>
-                    Start your study session while StudyLens monitors your
-                    focus
-                  </li>
-                  <li>Review your focus summary after each session</li>
-                  <li>Track your progress over time in the "Summary"</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Camera Page -->
-      <div id="camera" class="page">
-        <div class="max-w-6xl mx-auto">
-          <div class="grid md:grid-cols-3 gap-8">
-            <!-- Camera Area -->
-            <div class="glass interactive-card rounded-2xl shadow-lg p-6 md:col-span-2">
-              <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Camera Access</h2>
-
-              <!-- Camera Preview Placeholder -->
-              <div id="camera-placeholder"
-                class="aspect-video bg-gray-100/30 dark:bg-gray-800/30 rounded-xl flex items-center justify-center mb-6 border border-gray-200/30 dark:border-gray-700/30">
-                <div class="text-center">
-                  <i class="bx bx-camera text-gray-400 text-5xl mb-2"></i>
-                  <p class="text-gray-500 dark:text-gray-400">Camera preview will appear here</p>
-                </div>
-              </div>
-
-              <!-- Enable Camera Button -->
-              <button id="enable-camera"
-                class="w-full bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center transition-all duration-200 pulse">
-                <i class="bx bx-camera mr-2"></i> Enable Camera
-              </button>
-
-              <!-- Camera Preview -->
-              <div id="camera-preview"
-                class="aspect-video bg-gray-100/30 dark:bg-gray-800/30 rounded-xl flex items-center justify-center mb-6 border border-gray-200/30 dark:border-gray-700/30 hidden">
-                <img id="video-stream" src="" alt="Camera preview" class="w-full h-full object-cover rounded-xl" loading="lazy">
-              </div>
-
-              <!-- Start Session Button -->
-              <button id="start-session"
-                class="hidden w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center transition-all duration-200">
-                <i class="bx bx-camera mr-2"></i> Start Session
-              </button>
-            </div>
-
-            <!-- Pomodoro Timer -->
-            <div class="glass interactive-card rounded-2xl shadow-lg p-6 w-full md:w-auto">
-              <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Pomodoro Timer</h2>
-
-              <div class="text-center mb-6">
-                <div id="timer-display" class="text-5xl font-mono font-semibold mb-2 text-gray-800 dark:text-white">
-                  25:00</div>
-                <p id="session-type" class="text-gray-500 dark:text-gray-400 capitalize">Focus Session</p>
-              </div>
-
-              <div class="w-full bg-gray-200/50 dark:bg-gray-700/50 rounded-full h-2 mb-6">
-                <div id="timer-progress" class="bg-primary-600 dark:bg-primary-500 h-2 rounded-full" style="width: 0%">
-                </div>
-              </div>
-
-              <!-- Timer Input -->
-              <div class="flex items-center justify-center mb-4">
-                <label for="timer-input" class="mr-2 text-gray-700 dark:text-gray-300">Set Timer (minutes):</label>
-                <input id="timer-input" type="number" min="1" max="120" value="25"
-                  class="w-20 p-2 border border-gray-300 rounded-lg text-center dark:bg-gray-800 dark:text-white">
-              </div>
-            </div>
-          </div>
-
-          <!-- Session Summary -->
-          <div id="session-summary" class="hidden mt-8 glass interactive-card rounded-2xl shadow-lg p-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Session Summary</h2>
-            <div id="summary-content" class="text-gray-700 dark:text-gray-300"></div>
-            <canvas id="focusChart" class="mt-6"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gallery Page -->
-      <div id="gallery" class="page">
-        <div class="max-w-6xl mx-auto">
-          <div class="mb-8">
-            <h2 class="text-2xl font-bold mb-2 text-gray-800 dark:text-white">
-              Your Study Sessions
+    <!-- Main Content -->
+    <div class="main-content min-h-screen">
+        <!-- Header -->
+        <header class="glass sticky top-0 z-10 h-16 flex items-center px-4 shadow-sm">
+            <button id="sidebar-toggle"
+                class="mr-4 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                <i class="bx bx-menu text-2xl"></i>
+            </button>
+            <h2 id="page-title" class="text-xl font-semibold text-gray-800 dark:text-white">
+                Welcome to StudyLens
             </h2>
-            <p class="text-gray-600 dark:text-gray-400">
-              Review your past study sessions and track your progress over
-              time.
-            </p>
-          </div>
+            <div class="ml-auto flex items-center space-x-4">
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                    <i class="bx bx-sun text-xl text-gray-600 dark:text-gray-300 dark:hidden"></i>
+                    <i class="bx bx-moon text-xl text-gray-600 dark:text-gray-300 hidden dark:block"></i>
+                </button>
+            </div>
+        </header>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="summary-cards">
-            <!-- Summary cards ada di JavaScript -->
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+        <!-- Page Content -->
+        <main class="p-6">
+            <!-- Welcome Page -->
+            <div id="welcome" class="page active">
+                <div class="max-w-6xl mx-auto">
+                    <div class="glass rounded-2xl shadow-lg overflow-hidden">
+                        <div class="interactive-gradient p-8 text-white">
+                            <h1 class="text-4xl font-bold mb-4">Welcome to StudyLens</h1>
+                            <p class="text-xl opacity-90">
+                                Computer Vision for Enhanced Learning Focus
+                            </p>
+                        </div>
 
-  <script>
-    // Sample data for summary cards
-    const summaries = [
-      {
-        id: 1,
-        date: "Today, 10:30 AM",
-        duration: "25 minutes",
-        focusScore: 85,
-        distractions: 3,
-        subject: "Mathematics",
-      },
-      {
-        id: 2,
-        date: "Today, 2:15 PM",
-        duration: "25 minutes",
-        focusScore: 92,
-        distractions: 1,
-        subject: "Physics",
-      },
-      {
-        id: 3,
-        date: "Yesterday, 9:00 AM",
-        duration: "25 minutes",
-        focusScore: 78,
-        distractions: 5,
-        subject: "History",
-      },
-    ];
+                        <div class="p-8 dark:text-white">
+                            <p class="text-lg text-gray-700 dark:text-gray-300 mb-8">
+                                StudyLens is an innovative Computer Vision program designed to
+                                detect and analyze student focus levels during online learning
+                                sessions. Using advanced AI algorithms, StudyLens helps
+                                students improve their study habits and maximize learning
+                                efficiency.
+                            </p>
 
-    // Function to determine color based on focus score
-    function getFocusColor(score) {
-      if (score >= 90)
-        return [
-          "bg-green-500",
-          "text-green-600",
-          "dark:text-green-400",
-          "border-green-500",
+                            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                                <div
+                                    class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
+                                    <div
+                                        class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                                        <i class="bx bx-brain text-primary-600 dark:text-primary-400 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+                                        Focus Detection
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        Real-time analysis of your attention levels during study
+                                        sessions
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
+                                    <div
+                                        class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                                        <i class="bx bx-target-lock text-primary-600 dark:text-primary-400 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+                                        Distraction Alerts
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        Gentle notifications when your focus drifts to help you
+                                        stay on track
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
+                                    <div
+                                        class="bg-primary-100 dark:bg-primary-900/50 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                                        <i class="bx bx-line-chart text-primary-600 dark:text-primary-400 text-xl"></i>
+                                    </div>
+                                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-white">
+                                        Progress Tracking
+                                    </h3>
+                                    <p class="text-gray-600 dark:text-gray-300">
+                                        Detailed analytics to help you understand and improve your
+                                        study patterns
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div
+                                class="glass interactive-card rounded-xl p-6 backdrop-blur-lg bg-opacity-30 border border-gray-300/30 dark:border-gray-700/30">
+                                <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">
+                                    How It Works
+                                </h3>
+                                <ol class="list-decimal pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+                                    <li>Open the camera in the "AiLens" section</li>
+                                    <li>Set your study duration using the Pomodoro timer</li>
+                                    <li>
+                                        Start your study session while StudyLens monitors your
+                                        focus
+                                    </li>
+                                    <li>Review your focus summary after each session</li>
+                                    <li>Track your progress over time in the "Summary"</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camera Page -->
+            <div id="camera" class="page">
+                <div class="max-w-6xl mx-auto">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Camera Area -->
+                        <div class="glass interactive-card rounded-2xl shadow-lg p-6 md:col-span-2">
+                            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Camera Access</h2>
+
+                            <!-- Camera Preview Placeholder -->
+                            <div id="camera-placeholder"
+                                class="aspect-video bg-gray-100/30 dark:bg-gray-800/30 rounded-xl flex items-center justify-center mb-6 border border-gray-200/30 dark:border-gray-700/30">
+                                <div class="text-center">
+                                    <i class="bx bx-camera text-gray-400 text-5xl mb-2"></i>
+                                    <p class="text-gray-500 dark:text-gray-400">Camera preview will appear here</p>
+                                </div>
+                            </div>
+
+                            <!-- Enable Camera Button -->
+                            <button id="enable-camera"
+                                class="w-full bg-primary-600 hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center transition-all duration-200 pulse">
+                                <i class="bx bx-camera mr-2"></i> Enable Camera
+                            </button>
+
+                            <!-- Camera Preview -->
+                            <div id="camera-preview"
+                                class="aspect-video bg-gray-100/30 dark:bg-gray-800/30 rounded-xl flex items-center justify-center mb-6 border border-gray-200/30 dark:border-gray-700/30 hidden">
+                                <img id="video-stream" src="" alt="Camera preview"
+                                    class="w-full h-full object-cover rounded-xl" loading="lazy">
+                            </div>
+
+                            <!-- Start Session Button -->
+                            <button id="start-session"
+                                class="hidden w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center transition-all duration-200">
+                                <i class="bx bx-camera mr-2"></i> Start Session
+                            </button>
+                        </div>
+
+                        <!-- Pomodoro Timer -->
+                        <div class="glass interactive-card rounded-2xl shadow-lg p-6 w-full md:w-auto">
+                            <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Pomodoro Timer</h2>
+
+                            <div class="text-center mb-6">
+                                <div id="timer-display"
+                                    class="text-5xl font-mono font-semibold mb-2 text-gray-800 dark:text-white">
+                                    25:00</div>
+                                <p id="session-type" class="text-gray-500 dark:text-gray-400 capitalize">Focus Session
+                                </p>
+                            </div>
+
+                            <div class="w-full bg-gray-200/50 dark:bg-gray-700/50 rounded-full h-2 mb-6">
+                                <div id="timer-progress" class="bg-primary-600 dark:bg-primary-500 h-2 rounded-full"
+                                    style="width: 0%">
+                                </div>
+                            </div>
+
+                            <!-- Timer Input -->
+                            <div class="flex items-center justify-center mb-4">
+                                <label for="timer-input" class="mr-2 text-gray-700 dark:text-gray-300">Set Timer
+                                    (minutes):</label>
+                                <input id="timer-input" type="number" min="1" max="120" value="25"
+                                    class="w-20 p-2 border border-gray-300 rounded-lg text-center dark:bg-gray-800 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Session Summary -->
+                    <div id="session-summary" class="hidden mt-8 glass interactive-card rounded-2xl shadow-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Session Summary</h2>
+                        <div id="summary-content" class="text-gray-700 dark:text-gray-300"></div>
+                        <canvas id="focusChart" class="mt-6"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Page -->
+            <div id="gallery" class="page">
+                <div class="max-w-6xl mx-auto">
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold mb-2 text-gray-800 dark:text-white">
+                            Your Study Sessions
+                        </h2>
+                        <p class="text-gray-600 dark:text-gray-400">
+                            Review your past study sessions and track your progress over
+                            time.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="summary-cards">
+                        <!-- Summary cards ada di JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Sample data for summary cards
+        const summaries = [
+            {
+                id: 1,
+                date: "Today, 10:30 AM",
+                duration: "25 minutes",
+                focusScore: 85,
+                distractions: 3,
+                subject: "Mathematics",
+            },
+            {
+                id: 2,
+                date: "Today, 2:15 PM",
+                duration: "25 minutes",
+                focusScore: 92,
+                distractions: 1,
+                subject: "Physics",
+            },
+            {
+                id: 3,
+                date: "Yesterday, 9:00 AM",
+                duration: "25 minutes",
+                focusScore: 78,
+                distractions: 5,
+                subject: "History",
+            },
         ];
-      if (score >= 80)
-        return [
-          "bg-blue-500",
-          "text-blue-600",
-          "dark:text-blue-400",
-          "border-blue-500",
-        ];
-      if (score >= 70)
-        return [
-          "bg-yellow-500",
-          "text-yellow-600",
-          "dark:text-yellow-400",
-          "border-yellow-500",
-        ];
-      return [
-        "bg-red-500",
-        "text-red-600",
-        "dark:text-red-400",
-        "border-red-500",
-      ];
-    }
 
-    // Generate summary cards
-    function generateSummaryCards() {
-      const container = document.getElementById("summary-cards");
-      container.innerHTML = "";
+        // Function to determine color based on focus score
+        function getFocusColor(score) {
+            if (score >= 90)
+                return [
+                    "bg-green-500",
+                    "text-green-600",
+                    "dark:text-green-400",
+                    "border-green-500",
+                ];
+            if (score >= 80)
+                return [
+                    "bg-blue-500",
+                    "text-blue-600",
+                    "dark:text-blue-400",
+                    "border-blue-500",
+                ];
+            if (score >= 70)
+                return [
+                    "bg-yellow-500",
+                    "text-yellow-600",
+                    "dark:text-yellow-400",
+                    "border-yellow-500",
+                ];
+            return [
+                "bg-red-500",
+                "text-red-600",
+                "dark:text-red-400",
+                "border-red-500",
+            ];
+        }
 
-      summaries.forEach((summary) => {
-        const colors = getFocusColor(summary.focusScore);
-        const card = document.createElement("div");
-        card.className =
-          "glass interactive-card rounded-2xl shadow-lg overflow-hidden";
-        card.innerHTML = `
+        // Generate summary cards
+        function generateSummaryCards() {
+            const container = document.getElementById("summary-cards");
+            container.innerHTML = "";
+
+            summaries.forEach((summary) => {
+                const colors = getFocusColor(summary.focusScore);
+                const card = document.createElement("div");
+                card.className =
+                    "glass interactive-card rounded-2xl shadow-lg overflow-hidden";
+                card.innerHTML = `
           <div class="p-5">
             <div class="flex justify-between items-start mb-4">
               <div>
@@ -594,364 +601,364 @@
                 <div class="${colors[0]} h-2 rounded-full" style="width: ${summary.focusScore}%"></div>
               </div>
             </div>
-          </div>
 
-          <div class="px-5 py-3 border-t border-gray-200/30 dark:border-gray-700/30 bg-white/5">
-            <button class="text-sm text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors">View Detailed Report</button>
+            <div class="px-5 py-3 border-t border-gray-200/30 dark:border-gray-700/30 bg-white/5">
+              <button class="text-sm text-primary-600 dark:text-primary-400 font-medium hover:text-primary-700 dark:hover:text-primary-300 transition-colors">View Detailed Report</button>
+            </div>
           </div>
         `;
-        container.appendChild(card);
-      });
-    }
-
-    // Handle interactive gradient effect
-    function handleMouseMove() {
-      const interactiveElements = document.querySelectorAll(
-        ".interactive-gradient, .interactive-card"
-      );
-
-      interactiveElements.forEach((element) => {
-        element.addEventListener("mousemove", (e) => {
-          // Get position relative to the element
-          const rect = element.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          // Calculate position in percentage
-          const xPercent = Math.round((x / rect.width) * 100);
-          const yPercent = Math.round((y / rect.height) * 100);
-
-          // Update CSS variables
-          element.style.setProperty("--x", `${xPercent}%`);
-          element.style.setProperty("--y", `${yPercent}%`);
-        });
-
-        // Reset position when mouse leaves
-        element.addEventListener("mouseleave", () => {
-          element.style.setProperty("--x", "50%");
-          element.style.setProperty("--y", "50%");
-        });
-      });
-    }
-
-    // Navigation
-    document.addEventListener("DOMContentLoaded", function () {
-      // Generate summary cards
-      generateSummaryCards();
-
-      // Initialize interactive gradient
-      handleMouseMove();
-
-      // Theme toggle
-      const themeToggle = document.getElementById("theme-toggle");
-      const html = document.documentElement;
-
-      // Check for saved theme preference or use system preference
-      if (
-        localStorage.getItem("theme") === "dark" ||
-        (!localStorage.getItem("theme") &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
-        html.classList.add("dark");
-      } else {
-        html.classList.remove("dark");
-      }
-
-      // Toggle theme
-      themeToggle.addEventListener("click", function () {
-        if (html.classList.contains("dark")) {
-          html.classList.remove("dark");
-          localStorage.setItem("theme", "light");
-        } else {
-          html.classList.add("dark");
-          localStorage.setItem("theme", "dark");
+                container.appendChild(card);
+            });
         }
-      });
 
-      // Sidebar toggle
-      const sidebarToggle = document.getElementById("sidebar-toggle");
-      const sidebar = document.querySelector(".sidebar");
-      const mainContent = document.querySelector(".main-content");
-      const studyName = document.getElementById("study-name");
-
-      // Toggle sidebar
-      sidebarToggle.addEventListener("click", function () {
-        sidebar.classList.toggle("collapsed");
-        mainContent.classList.toggle("expanded");
-
-        if (window.innerWidth <= 768) {
-          sidebar.classList.toggle("expanded");
-
-          if (sidebar.classList.contains("expanded")) {
-            studyName.classList.remove("hidden");
-          } else {
-            studyName.classList.add("hidden");
-          }
-        } else {
-          studyName.classList.toggle("hidden");
-        }
-      });
-
-      // Navigation click
-      const navItems = document.querySelectorAll(".nav-item");
-      const pages = document.querySelectorAll(".page");
-      const pageTitle = document.getElementById("page-title");
-
-      navItems.forEach((item) => {
-        item.addEventListener("click", function (e) {
-          e.preventDefault();
-
-          // Update active nav item
-          navItems.forEach((nav) => {
-            nav.classList.remove(
-              "bg-white/20",
-              "dark:bg-gray-800/40",
-              "text-primary-600",
-              "dark:text-primary-400"
+        // Handle interactive gradient effect
+        function handleMouseMove() {
+            const interactiveElements = document.querySelectorAll(
+                ".interactive-gradient, .interactive-card"
             );
-          });
-          this.classList.add(
-            "bg-white/20",
-            "dark:bg-gray-800/40",
-            "text-primary-600",
-            "dark:text-primary-400"
-          );
 
-          // Show corresponding page
-          const targetId = this.getAttribute("href").substring(1);
-          pages.forEach((page) => page.classList.remove("active"));
-          document.getElementById(targetId).classList.add("active");
+            interactiveElements.forEach((element) => {
+                element.addEventListener("mousemove", (e) => {
+                    // Get position relative to the element
+                    const rect = element.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
-          // Update page title
-          if (targetId === "welcome")
-            pageTitle.textContent = "Welcome to StudyLens";
-          if (targetId === "camera") pageTitle.textContent = "Ailens";
-          if (targetId === "gallery") pageTitle.textContent = "Summary";
+                    // Calculate position in percentage
+                    const xPercent = Math.round((x / rect.width) * 100);
+                    const yPercent = Math.round((y / rect.height) * 100);
 
-          // Close sidebar on mobile after navigation
-          if (window.innerWidth <= 768) {
-            sidebar.classList.remove("expanded");
-            studyName.classList.add("hidden");
-          }
-        });
-      });
+                    // Update CSS variables
+                    element.style.setProperty("--x", `${xPercent}%`);
+                    element.style.setProperty("--y", `${yPercent}%`);
+                });
 
-      // Detect click di luar sidebar
-      document.addEventListener("click", function (e) {
-        if (window.innerWidth <= 768) {
-          const isClickInsideSidebar = sidebar.contains(e.target);
-          const isClickToggleButton = sidebarToggle.contains(e.target);
-
-          // Kalau klik di luar sidebar DAN bukan tombol toggle
-          if (!isClickInsideSidebar && !isClickToggleButton) {
-            sidebar.classList.remove("expanded");
-            studyName.classList.add("hidden");
-          }
+                // Reset position when mouse leaves
+                element.addEventListener("mouseleave", () => {
+                    element.style.setProperty("--x", "50%");
+                    element.style.setProperty("--y", "50%");
+                });
+            });
         }
-      });
 
-      // Responsive handling (kalau resize layar)
-      window.addEventListener("resize", function () {
-        if (window.innerWidth > 768) {
-          studyName.classList.remove("hidden");
-        } else {
-          if (!sidebar.classList.contains("expanded")) {
-            studyName.classList.add("hidden");
-          }
-        }
-      });
+        // Navigation
+        document.addEventListener("DOMContentLoaded", function () {
+            // Generate summary cards
+            generateSummaryCards();
 
-      // Timer functionality
-      let timerInterval;
-      let isTimerRunning = false;
-      let timeLeft = 25 * 60; // 25 minutes in seconds
-      let currentSession = "focus"; // 'focus' or 'break'
+            // Initialize interactive gradient
+            handleMouseMove();
 
-      const timerDisplay = document.getElementById("timer-display");
-      const sessionType = document.getElementById("session-type");
-      const timerProgress = document.getElementById("timer-progress");
-      const timerToggle = document.getElementById("timer-toggle");
-      const timerReset = document.getElementById("timer-reset");
-      const sessionSummary = document.getElementById("session-summary");
-      const startBreak = document.getElementById("start-break");
-      const newSession = document.getElementById("new-session");
+            // Theme toggle
+            const themeToggle = document.getElementById("theme-toggle");
+            const html = document.documentElement;
 
-      // Format time as MM:SS
-      function formatTime(seconds) {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins
-          .toString()
-          .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-      }
+            // Check for saved theme preference or use system preference
+            if (
+                localStorage.getItem("theme") === "dark" ||
+                (!localStorage.getItem("theme") &&
+                    window.matchMedia("(prefers-color-scheme: dark)").matches)
+            ) {
+                html.classList.add("dark");
+            } else {
+                html.classList.remove("dark");
+            }
 
-      // Calculate progress percentage
-      function calculateProgress() {
-        const totalTime = currentSession === "focus" ? 25 * 60 : 5 * 60;
-        return ((totalTime - timeLeft) / totalTime) * 100;
-      }
+            // Toggle theme
+            themeToggle.addEventListener("click", function () {
+                if (html.classList.contains("dark")) {
+                    html.classList.remove("dark");
+                    localStorage.setItem("theme", "light");
+                } else {
+                    html.classList.add("dark");
+                    localStorage.setItem("theme", "dark");
+                }
+            });
 
-      // Update timer display
-      function updateTimerDisplay() {
-        timerDisplay.textContent = formatTime(timeLeft);
-        timerProgress.style.width = `${calculateProgress()}%`;
-      }
+            // Sidebar toggle
+            const sidebarToggle = document.getElementById("sidebar-toggle");
+            const sidebar = document.querySelector(".sidebar");
+            const mainContent = document.querySelector(".main-content");
+            const studyName = document.getElementById("study-name");
 
-      // Start/pause timer
-      timerToggle.addEventListener("click", function () {
-        if (isTimerRunning) {
-          // Pause timer
-          clearInterval(timerInterval);
-          timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
-          timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
-          timerToggle.classList.add("bg-primary-600", "dark:bg-primary-700");
-        } else {
-          // Start timer
-          timerInterval = setInterval(function () {
-            timeLeft--;
-            updateTimerDisplay();
+            // Toggle sidebar
+            sidebarToggle.addEventListener("click", function () {
+                sidebar.classList.toggle("collapsed");
+                mainContent.classList.toggle("expanded");
 
-            if (timeLeft <= 0) {
-              clearInterval(timerInterval);
-              isTimerRunning = false;
-              timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
-              timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
-              timerToggle.classList.add(
-                "bg-primary-600",
-                "dark:bg-primary-700"
-              );
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.toggle("expanded");
 
-              if (currentSession === "focus") {
-                sessionSummary.classList.remove("hidden");
-              } else {
-                // Reset for next focus session
+                    if (sidebar.classList.contains("expanded")) {
+                        studyName.classList.remove("hidden");
+                    } else {
+                        studyName.classList.add("hidden");
+                    }
+                } else {
+                    studyName.classList.toggle("hidden");
+                }
+            });
+
+            // Navigation click
+            const navItems = document.querySelectorAll(".nav-item");
+            const pages = document.querySelectorAll(".page");
+            const pageTitle = document.getElementById("page-title");
+
+            navItems.forEach((item) => {
+                item.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    // Update active nav item
+                    navItems.forEach((nav) => {
+                        nav.classList.remove(
+                            "bg-white/20",
+                            "dark:bg-gray-800/40",
+                            "text-primary-600",
+                            "dark:text-primary-400"
+                        );
+                    });
+                    this.classList.add(
+                        "bg-white/20",
+                        "dark:bg-gray-800/40",
+                        "text-primary-600",
+                        "dark:text-primary-400"
+                    );
+
+                    // Show corresponding page
+                    const targetId = this.getAttribute("href").substring(1);
+                    pages.forEach((page) => page.classList.remove("active"));
+                    document.getElementById(targetId).classList.add("active");
+
+                    // Update page title
+                    if (targetId === "welcome")
+                        pageTitle.textContent = "Welcome to StudyLens";
+                    if (targetId === "camera") pageTitle.textContent = "Ailens";
+                    if (targetId === "gallery") pageTitle.textContent = "Summary";
+
+                    // Close sidebar on mobile after navigation
+                    if (window.innerWidth <= 768) {
+                        sidebar.classList.remove("expanded");
+                        studyName.classList.add("hidden");
+                    }
+                });
+            });
+
+            // Detect click di luar sidebar
+            document.addEventListener("click", function (e) {
+                if (window.innerWidth <= 768) {
+                    const isClickInsideSidebar = sidebar.contains(e.target);
+                    const isClickToggleButton = sidebarToggle.contains(e.target);
+
+                    // Kalau klik di luar sidebar DAN bukan tombol toggle
+                    if (!isClickInsideSidebar && !isClickToggleButton) {
+                        sidebar.classList.remove("expanded");
+                        studyName.classList.add("hidden");
+                    }
+                }
+            });
+
+            // Responsive handling (kalau resize layar)
+            window.addEventListener("resize", function () {
+                if (window.innerWidth > 768) {
+                    studyName.classList.remove("hidden");
+                } else {
+                    if (!sidebar.classList.contains("expanded")) {
+                        studyName.classList.add("hidden");
+                    }
+                }
+            });
+
+            // Timer functionality
+            let timerInterval;
+            let isTimerRunning = false;
+            let timeLeft = 25 * 60; // 25 minutes in seconds
+            let currentSession = "focus"; // 'focus' or 'break'
+
+            const timerDisplay = document.getElementById("timer-display");
+            const sessionType = document.getElementById("session-type");
+            const timerProgress = document.getElementById("timer-progress");
+            const timerToggle = document.getElementById("timer-toggle");
+            const timerReset = document.getElementById("timer-reset");
+            const sessionSummary = document.getElementById("session-summary");
+            const startBreak = document.getElementById("start-break");
+            const newSession = document.getElementById("new-session");
+
+            // Format time as MM:SS
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${mins
+                    .toString()
+                    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+            }
+
+            // Calculate progress percentage
+            function calculateProgress() {
+                const totalTime = currentSession === "focus" ? 25 * 60 : 5 * 60;
+                return ((totalTime - timeLeft) / totalTime) * 100;
+            }
+
+            // Update timer display
+            function updateTimerDisplay() {
+                timerDisplay.textContent = formatTime(timeLeft);
+                timerProgress.style.width = `${calculateProgress()}%`;
+            }
+
+            // Start/pause timer
+            timerToggle.addEventListener("click", function () {
+                if (isTimerRunning) {
+                    // Pause timer
+                    clearInterval(timerInterval);
+                    timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
+                    timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
+                    timerToggle.classList.add("bg-primary-600", "dark:bg-primary-700");
+                } else {
+                    // Start timer
+                    timerInterval = setInterval(function () {
+                        timeLeft--;
+                        updateTimerDisplay();
+
+                        if (timeLeft <= 0) {
+                            clearInterval(timerInterval);
+                            isTimerRunning = false;
+                            timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
+                            timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
+                            timerToggle.classList.add(
+                                "bg-primary-600",
+                                "dark:bg-primary-700"
+                            );
+
+                            if (currentSession === "focus") {
+                                sessionSummary.classList.remove("hidden");
+                            } else {
+                                // Reset for next focus session
+                                currentSession = "focus";
+                                timeLeft = 25 * 60;
+                                sessionType.textContent = "Focus Session";
+                                updateTimerDisplay();
+                            }
+                        }
+                    }, 1000);
+
+                    timerToggle.innerHTML = '<i class="bx bx-pause mr-2"></i> Pause';
+                    timerToggle.classList.remove(
+                        "bg-primary-600",
+                        "dark:bg-primary-700"
+                    );
+                    timerToggle.classList.add("bg-gray-600", "dark:bg-gray-600");
+                }
+
+                isTimerRunning = !isTimerRunning;
+            });
+
+            // Reset timer
+            timerReset.addEventListener("click", function () {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                timeLeft = currentSession === "focus" ? 25 * 60 : 5 * 60;
+                updateTimerDisplay();
+                timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
+                timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
+                timerToggle.classList.add("bg-primary-600", "dark:bg-primary-700");
+                sessionSummary.classList.add("hidden");
+            });
+
+            // Start break
+            startBreak.addEventListener("click", function () {
+                currentSession = "break";
+                timeLeft = 5 * 60; // 5 minute break
+                sessionType.textContent = "Break Time";
+                updateTimerDisplay();
+                sessionSummary.classList.add("hidden");
+
+                // Auto-start the break timer
+                if (!isTimerRunning) {
+                    timerToggle.click();
+                }
+            });
+
+            // Start new session
+            newSession.addEventListener("click", function () {
                 currentSession = "focus";
                 timeLeft = 25 * 60;
                 sessionType.textContent = "Focus Session";
                 updateTimerDisplay();
-              }
-            }
-          }, 1000);
+                sessionSummary.classList.add("hidden");
+            });
 
-          timerToggle.innerHTML = '<i class="bx bx-pause mr-2"></i> Pause';
-          timerToggle.classList.remove(
-            "bg-primary-600",
-            "dark:bg-primary-700"
-          );
-          timerToggle.classList.add("bg-gray-600", "dark:bg-gray-600");
+            // Initialize timer display
+            updateTimerDisplay();
+        });
+
+        let streamActive = false;
+        let timerDuration = 25 * 60; // default 25 menit
+        let timerInterval;
+
+        const videoStream = document.getElementById("video-stream");
+        const enableCameraButton = document.getElementById("enable-camera");
+        const timerDisplay = document.getElementById("timer-display");
+
+        function startStream() {
+            videoStream.src = '/video_feed';
+            videoStream.classList.remove('hidden');
+            streamActive = true;
         }
 
-        isTimerRunning = !isTimerRunning;
-      });
-
-      // Reset timer
-      timerReset.addEventListener("click", function () {
-        clearInterval(timerInterval);
-        isTimerRunning = false;
-        timeLeft = currentSession === "focus" ? 25 * 60 : 5 * 60;
-        updateTimerDisplay();
-        timerToggle.innerHTML = '<i class="bx bx-play mr-2"></i> Start';
-        timerToggle.classList.remove("bg-gray-600", "dark:bg-gray-600");
-        timerToggle.classList.add("bg-primary-600", "dark:bg-primary-700");
-        sessionSummary.classList.add("hidden");
-      });
-
-      // Start break
-      startBreak.addEventListener("click", function () {
-        currentSession = "break";
-        timeLeft = 5 * 60; // 5 minute break
-        sessionType.textContent = "Break Time";
-        updateTimerDisplay();
-        sessionSummary.classList.add("hidden");
-
-        // Auto-start the break timer
-        if (!isTimerRunning) {
-          timerToggle.click();
+        function stopStream() {
+            videoStream.src = '';
+            videoStream.classList.add('hidden');
+            streamActive = false;
         }
-      });
 
-      // Start new session
-      newSession.addEventListener("click", function () {
-        currentSession = "focus";
-        timeLeft = 25 * 60;
-        sessionType.textContent = "Focus Session";
-        updateTimerDisplay();
-        sessionSummary.classList.add("hidden");
-      });
-
-      // Initialize timer display
-      updateTimerDisplay();
-    });
-
-    let streamActive = false;
-    let timerDuration = 25 * 60; // default 25 menit
-    let timerInterval;
-
-    const videoStream = document.getElementById("video-stream");
-    const enableCameraButton = document.getElementById("enable-camera");
-    const timerDisplay = document.getElementById("timer-display");
-
-    function startStream() {
-      videoStream.src = '/video_feed';
-      videoStream.classList.remove('hidden');
-      streamActive = true;
-    }
-
-    function stopStream() {
-      videoStream.src = '';
-      videoStream.classList.add('hidden');
-      streamActive = false;
-    }
-
-    // Format MM:SS
-    function formatTime(seconds) {
-      const minutes = Math.floor(seconds / 60);
-      const secs = seconds % 60;
-      return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    }
-
-    // Start Timer
-    function startTimer() {
-      timerDisplay.textContent = formatTime(timerDuration);
-
-      timerInterval = setInterval(() => {
-        timerDuration--;
-        timerDisplay.textContent = formatTime(timerDuration);
-
-        if (timerDuration <= 0) {
-          clearInterval(timerInterval);
-          stopStream();
-          fetchSummary();
+        // Format MM:SS
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
         }
-      }, 1000);
-    }
 
-    // Fetch summary dari server setelah timer selesai
-    function fetchSummary() {
-  fetch("/summary")
-    .then((response) => response.json())
-    .then((data) => {
-      displaySummary(data);
-      document.getElementById("session-summary").classList.remove("hidden");
-    })
-    .catch((error) => {
-      console.error("Error fetching summary:", error);
-    });
-}
+        // Start Timer
+        function startTimer() {
+            timerDisplay.textContent = formatTime(timerDuration);
 
-    // Tampilkan hasil Summary
-    function showSummary(data) {
-      const summarySection = document.getElementById('summary-cards');
-      summarySection.innerHTML = '';
+            timerInterval = setInterval(() => {
+                timerDuration--;
+                timerDisplay.textContent = formatTime(timerDuration);
 
-      const colors = data.focus_level === "High" ? "bg-green-500"
-        : data.focus_level === "Medium" ? "bg-blue-500"
-          : "bg-yellow-500";
+                if (timerDuration <= 0) {
+                    clearInterval(timerInterval);
+                    stopStream();
+                    fetchSummary();
+                }
+            }, 1000);
+        }
 
-      const summaryCard = document.createElement('div');
-      summaryCard.className = "glass interactive-card rounded-2xl shadow-lg overflow-hidden";
+        // Fetch summary dari server setelah timer selesai
+        function fetchSummary() {
+            fetch("/summary")
+                .then((response) => response.json())
+                .then((data) => {
+                    displaySummary(data);
+                    document.getElementById("session-summary").classList.remove("hidden");
+                })
+                .catch((error) => {
+                    console.error("Error fetching summary:", error);
+                });
+        }
 
-      summaryCard.innerHTML = `
+        // Tampilkan hasil Summary
+        function showSummary(data) {
+            const summarySection = document.getElementById('summary-cards');
+            summarySection.innerHTML = '';
+
+            const colors = data.focus_level === "High" ? "bg-green-500"
+                : data.focus_level === "Medium" ? "bg-blue-500"
+                    : "bg-yellow-500";
+
+            const summaryCard = document.createElement('div');
+            summaryCard.className = "glass interactive-card rounded-2xl shadow-lg overflow-hidden";
+
+            summaryCard.innerHTML = `
     <div class="p-5">
       <h3 class="text-xl font-semibold mb-2 text-gray-800 dark:text-white">Session Summary</h3>
       <p class="text-gray-500 dark:text-gray-400 mb-2">Date: ${data.today}</p>
@@ -973,149 +980,149 @@
     </div>
   `;
 
-      summarySection.appendChild(summaryCard);
+            summarySection.appendChild(summaryCard);
 
-      // Pindah ke Summary Page
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById('gallery').classList.add('active');
-      document.getElementById('page-title').innerText = "Summary";
-    }
-
-    // Saat tombol di klik
-    enableCameraButton.addEventListener('click', () => {
-      if (!streamActive) {
-        startStream();
-      }
-    });
-
-
-    // bla bla
-
-    document.addEventListener("DOMContentLoaded", function () {
-      let cameraEnabled = false;
-      let timerSet = false;
-      let sessionActive = false;
-
-      const enableCameraButton = document.getElementById("enable-camera");
-      const startSessionButton = document.getElementById("start-session");
-      const timerInput = document.getElementById("timer-input");
-      const cameraPlaceholder = document.getElementById("camera-placeholder");
-      const cameraPreview = document.getElementById("camera-preview");
-      const videoStream = document.getElementById("video-stream");
-      const timerDisplay = document.getElementById("timer-display");
-      const sessionSummary = document.getElementById("session-summary");
-      const summaryContent = document.getElementById("summary-content");
-
-      let timerInterval;
-      let timeLeft = 25 * 60; // Default 25 minutes
-
-      // Enable Camera
-      enableCameraButton.addEventListener("click", function () {
-        cameraEnabled = true;
-        videoStream.src = "/video_feed"; // Mulai streaming dari Flask
-        cameraPlaceholder.classList.add("hidden");
-        cameraPreview.classList.remove("hidden");
-        enableCameraButton.classList.add("hidden");
-        startSessionButton.classList.remove("hidden");
-        checkStartSession();
-      });
-
-      // Timer Input Change
-      timerInput.addEventListener("input", function () {
-        const minutes = parseInt(timerInput.value, 10);
-        if (minutes > 0) {
-          timeLeft = minutes * 60;
-          updateTimerDisplay();
-          timerSet = true;
-          checkStartSession();
-        } else {
-          timerSet = false;
-          startSessionButton.disabled = true;
+            // Pindah ke Summary Page
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('gallery').classList.add('active');
+            document.getElementById('page-title').innerText = "Summary";
         }
-      });
 
-      // Check if Start Session can be enabled
-      function checkStartSession() {
-        if (cameraEnabled && timerSet) {
-          startSessionButton.disabled = false;
-          startSessionButton.classList.remove("bg-gray-400");
-          startSessionButton.classList.add("bg-primary-600", "hover:bg-primary-700");
-        }
-      }
-
-      // Start Session
-      startSessionButton.addEventListener("click", function () {
-        if (!sessionActive) {
-          sessionActive = true;
-          startSessionButton.textContent = "Stop Session";
-          startSessionButton.classList.remove("bg-primary-600", "hover:bg-primary-700");
-          startSessionButton.classList.add("bg-red-600", "hover:bg-red-700");
-
-          // Start timer
-          timerInterval = setInterval(function () {
-            timeLeft--;
-            updateTimerDisplay();
-
-            if (timeLeft <= 0) {
-              stopSession();
+        // Saat tombol di klik
+        enableCameraButton.addEventListener('click', () => {
+            if (!streamActive) {
+                startStream();
             }
-          }, 1000);
+        });
 
-          console.log("Session started");
-        } else {
-          stopSession();
-        }
-      });
 
-      // Stop Session
-      function stopSession() {
-        sessionActive = false;
-        clearInterval(timerInterval);
-        startSessionButton.textContent = "Start Session";
-        startSessionButton.classList.remove("bg-red-600", "hover:bg-red-700");
-        startSessionButton.classList.add("bg-primary-600", "hover:bg-primary-700");
+        // bla bla
 
-        // Matikan kamera
-        videoStream.src = "";
-        cameraPreview.classList.add("hidden");
+        document.addEventListener("DOMContentLoaded", function () {
+            let cameraEnabled = false;
+            let timerSet = false;
+            let sessionActive = false;
 
-        // Tampilkan kembali placeholder kamera dan tombol "Enable Camera"
-        cameraPlaceholder.classList.remove("hidden");
-        enableCameraButton.classList.remove("hidden");
-        startSessionButton.classList.add("hidden");
+            const enableCameraButton = document.getElementById("enable-camera");
+            const startSessionButton = document.getElementById("start-session");
+            const timerInput = document.getElementById("timer-input");
+            const cameraPlaceholder = document.getElementById("camera-placeholder");
+            const cameraPreview = document.getElementById("camera-preview");
+            const videoStream = document.getElementById("video-stream");
+            const timerDisplay = document.getElementById("timer-display");
+            const sessionSummary = document.getElementById("session-summary");
+            const summaryContent = document.getElementById("summary-content");
 
-        // Tampilkan summary
-        sessionSummary.classList.remove("hidden");
+            let timerInterval;
+            let timeLeft = 25 * 60; // Default 25 minutes
 
-        // Fetch real summary dari Flask backend
-        fetchSummary();
+            // Enable Camera
+            enableCameraButton.addEventListener("click", function () {
+                cameraEnabled = true;
+                videoStream.src = "/video_feed"; // Mulai streaming dari Flask
+                cameraPlaceholder.classList.add("hidden");
+                cameraPreview.classList.remove("hidden");
+                enableCameraButton.classList.add("hidden");
+                startSessionButton.classList.remove("hidden");
+                checkStartSession();
+            });
 
-        console.log("Session stopped");
-      }
+            // Timer Input Change
+            timerInput.addEventListener("input", function () {
+                const minutes = parseInt(timerInput.value, 10);
+                if (minutes > 0) {
+                    timeLeft = minutes * 60;
+                    updateTimerDisplay();
+                    timerSet = true;
+                    checkStartSession();
+                } else {
+                    timerSet = false;
+                    startSessionButton.disabled = true;
+                }
+            });
 
-      // Update Timer Display
-      function updateTimerDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-      }
+            // Check if Start Session can be enabled
+            function checkStartSession() {
+                if (cameraEnabled && timerSet) {
+                    startSessionButton.disabled = false;
+                    startSessionButton.classList.remove("bg-gray-400");
+                    startSessionButton.classList.add("bg-primary-600", "hover:bg-primary-700");
+                }
+            }
 
-      // Fetch Real Summary
-      function fetchSummary() {
-        fetch("/summary")
-          .then(response => response.json())
-          .then(data => {
-            displaySummary(data);
-          })
-          .catch(error => {
-            console.error('Error fetching summary:', error);
-          });
-      }
+            // Start Session
+            startSessionButton.addEventListener("click", function () {
+                if (!sessionActive) {
+                    sessionActive = true;
+                    startSessionButton.textContent = "Stop Session";
+                    startSessionButton.classList.remove("bg-primary-600", "hover:bg-primary-700");
+                    startSessionButton.classList.add("bg-red-600", "hover:bg-red-700");
 
-      // Display Real Summary
-      function displaySummary(data) {
-  const summaryContent = document.getElementById("summary-content");
-  summaryContent.innerHTML = `
+                    // Start timer
+                    timerInterval = setInterval(function () {
+                        timeLeft--;
+                        updateTimerDisplay();
+
+                        if (timeLeft <= 0) {
+                            stopSession();
+                        }
+                    }, 1000);
+
+                    console.log("Session started");
+                } else {
+                    stopSession();
+                }
+            });
+
+            // Stop Session
+            function stopSession() {
+                sessionActive = false;
+                clearInterval(timerInterval);
+                startSessionButton.textContent = "Start Session";
+                startSessionButton.classList.remove("bg-red-600", "hover:bg-red-700");
+                startSessionButton.classList.add("bg-primary-600", "hover:bg-primary-700");
+
+                // Matikan kamera
+                videoStream.src = "";
+                cameraPreview.classList.add("hidden");
+
+                // Tampilkan kembali placeholder kamera dan tombol "Enable Camera"
+                cameraPlaceholder.classList.remove("hidden");
+                enableCameraButton.classList.remove("hidden");
+                startSessionButton.classList.add("hidden");
+
+                // Tampilkan summary
+                sessionSummary.classList.remove("hidden");
+
+                // Fetch real summary dari Flask backend
+                fetchSummary();
+
+                console.log("Session stopped");
+            }
+
+            // Update Timer Display
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            }
+
+            // Fetch Real Summary
+            function fetchSummary() {
+                fetch("/summary")
+                    .then(response => response.json())
+                    .then(data => {
+                        displaySummary(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching summary:', error);
+                    });
+            }
+
+            // Display Real Summary
+            function displaySummary(data) {
+                const summaryContent = document.getElementById("summary-content");
+                summaryContent.innerHTML = `
     <div class="p-5">
       <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Session Summary</h3>
       <div class="grid grid-cols-2 gap-4 mb-4">
@@ -1162,15 +1169,15 @@
       </div>
     </div>
   `;
-}
+            }
 
-      // Initialize Timer Display
-      updateTimerDisplay();
-    });
+            // Initialize Timer Display
+            updateTimerDisplay();
+        });
 
 
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </body>
 

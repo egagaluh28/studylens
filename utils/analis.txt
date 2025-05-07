@@ -20,7 +20,6 @@ def analyze_head_movement(head_positions):
     distracted_score = (distracted_count / total_count) * 0.7
     sleepy_score = (sleepy_count / total_count) * 0.5
 
-    # Determine focus level based on weighted scores
     if focus_score > distracted_score and focus_score > sleepy_score:
         return "High Focus"
     elif distracted_score > focus_score and distracted_score > sleepy_score:
